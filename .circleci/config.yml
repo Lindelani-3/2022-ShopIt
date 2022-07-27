@@ -42,7 +42,9 @@ jobs:
           command: |
             ./gradlew assembleRelease
             
-      - run: | 
+      - run: 
+          name: Upload to Codecov
+          command: |
             curl -Os https://uploader.codecov.io/latest/linux/codecov
             find . -iregex "codecov.*"
             chmod +x codecov 
