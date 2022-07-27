@@ -33,6 +33,8 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+          
+      - codecov/upload
 
       - run:
           name: Save test results
