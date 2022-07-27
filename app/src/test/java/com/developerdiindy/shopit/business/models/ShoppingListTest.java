@@ -1,4 +1,4 @@
-package com.developerdiindy.shopit.logic.models;
+package com.developerdiindy.shopit.business.models;
 
 import static org.junit.jupiter.api.Assertions.*;
 
