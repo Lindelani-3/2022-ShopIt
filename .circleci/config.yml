@@ -34,13 +34,12 @@ jobs:
       - store_test_results:
           path: app/build/test-results
           
-      - codecov/upload
-
+      # And finally run the release build
       - run:
-          name: Save test results
+          command: ./gradlew jacocoTestReport
+      - run:
+          name: Assemble release build
           command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
-      - store_test_results:
-          path: ~/test-results 
+            ./gradlew assembleRelease
+      - codecov/upload:
+          file: '/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
