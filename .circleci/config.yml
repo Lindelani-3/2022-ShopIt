@@ -56,6 +56,7 @@ jobs:
             ./gradlew assembleRelease
             
       - codecov/upload
+        file: 'app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
       
 workflows:
   TestTest: # This is the name of the workflow, feel free to change it to better match your workflow.
