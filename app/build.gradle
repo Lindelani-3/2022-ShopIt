@@ -3,6 +3,7 @@ plugins {
     id 'jacoco'
 }
 
+
 android {
     compileSdk 31
 
@@ -39,6 +40,7 @@ android {
     testOptions {
         unitTests.all {
             useJUnitPlatform()
+            finalizedBy jacocoTestReport
         }
     }
 }
@@ -57,14 +59,35 @@ dependencies {
 }
 
 
-task jacocoTestReport(type: JacocoReport,
-        dependsOn: ['testDebugUnitTest']) {
-
-    description = "Generate Jacoco coverage reports after running tests."
+// Generate code coverage reports ... run with jacoco
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
 
     reports {
         xml.required = true
         csv.required = false
         html.required = true
     }
+
+    def fileFilter = ['androidx/**/*.*',
+                      '**/view/*.*',
+                      '**/data/*.*',
+                      '**/data/model/*.*',
+                      '**/generated/callback/*.*',
+                      '**/lambda$*.class',
+                      '**/lambda.class',
+                      '**/*lambda.class',
+                      '**/*lambda*.class']
+
+    def debugTree = fileTree(dir:
+            "${buildDir}/intermediates/javac/debug/classes",
+            excludes: fileFilter
+    )
+
+    def mainSrc = "/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: "${buildDir}", includes:[
+            "/jacoco/testDebugUnitTest.exec","outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"]))
 }
