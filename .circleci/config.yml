@@ -6,11 +6,8 @@ orbs:
   
 jobs:
   build--test:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-31
-    environment:
-      JVM_OPTS: -Xmx3200m
+    executor:
+      name: android/android-machine
     steps:
       - checkout
       - restore_cache:
@@ -46,7 +43,7 @@ jobs:
       - codecov/upload
       
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+  TestTest: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build--test
