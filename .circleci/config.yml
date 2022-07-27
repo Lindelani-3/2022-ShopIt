@@ -5,7 +5,7 @@ orbs:
   node: circleci/node@4.7.0
   
 jobs:
-  build:
+  build--test:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -43,6 +43,10 @@ jobs:
           command: |
             ./gradlew assembleRelease
             
-      - node/test:
-          post-steps:
-            - codecov/upload
+      - codecov/upload
+      
+workflows:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      - build--test
