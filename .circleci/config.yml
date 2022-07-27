@@ -41,5 +41,4 @@ jobs:
           name: Assemble release build
           command: |
             ./gradlew assembleRelease
-      - codecov/upload:
-          file: '/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
+      - codecov/upload
