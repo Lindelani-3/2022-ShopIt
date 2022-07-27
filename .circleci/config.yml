@@ -31,7 +31,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
           
       - android/start-emulator:
-          avd-name: myAVD
+          avd-name: myavd
           no-window: true
           restore-gradle-cache-prefix: v1a
 
