@@ -9,6 +9,7 @@ jobs:
   build--test:
     executor:
       name: android/android-machine
+      tag: 2021.10.1
     steps:
       - checkout
       - restore_cache:
