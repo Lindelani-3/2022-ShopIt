@@ -33,11 +33,6 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew lint test
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-      - store_test_results:
-          path: app/build/test-results
       
       - save_cache:
           paths:
@@ -54,6 +49,12 @@ jobs:
           name: Assemble release build
           command: |
             ./gradlew assembleRelease
+
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
             
       - codecov/upload
       
