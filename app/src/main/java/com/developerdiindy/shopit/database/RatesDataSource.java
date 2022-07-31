@@ -9,9 +9,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-/**
- * Created by javierg on 23/08/16.
- */
+import com.developerdiindy.shopit.business.models.Rate;
+
 public class RatesDataSource {
     // Database fields
     private SQLiteDatabase mDatabase;
@@ -20,7 +19,7 @@ public class RatesDataSource {
             DatabaseHelper.COLUMN_COIN, DatabaseHelper.COLUMN_VALUE};
 
     public RatesDataSource(Context context) {
-        mDbHelper = new MySQLiteHelper(context);
+        mDbHelper = new DatabaseHelper(context);
     }
 
     public void open() throws SQLException {
@@ -56,7 +55,7 @@ public class RatesDataSource {
     public List<Rate> getAllRates() {
         List<Rate> rates = new ArrayList<Rate>();
 
-        Cursor cursor = mDatabase.query(MySQLiteHelper.TABLE_RATE,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_RATE,
                 mAllColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
