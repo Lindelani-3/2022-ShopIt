@@ -42,6 +42,9 @@ public class RatesDataSource {
         cursor.moveToFirst();
         Rate newComment = cursorToRate(cursor);
         cursor.close();
+
+        System.out.println("DONE CREATING");
+        System.out.println("COIN:: " + newComment.getCoin());
         return newComment;
     }
 

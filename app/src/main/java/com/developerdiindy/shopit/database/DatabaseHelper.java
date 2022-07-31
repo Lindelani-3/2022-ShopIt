@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_COIN = "coin";
     public static final String COLUMN_VALUE = "value";
 
-    private static final String DATABASE_NAME = "units.db";
+    private static final String DATABASE_NAME = "Units.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement

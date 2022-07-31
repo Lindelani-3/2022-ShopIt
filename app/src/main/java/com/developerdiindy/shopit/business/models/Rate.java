@@ -5,6 +5,15 @@ public class Rate {
     private String coin;
     private Double value;
 
+    public Rate(long id, String coin, Double value) {
+        this.id = id;
+        this.coin = coin;
+        this.value = value;
+    }
+
+    public Rate() {
+    }
+
     public long getId() {
         return id;
     }
