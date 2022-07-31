@@ -3,21 +3,27 @@ package com.developerdiindy.shopit;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +53,126 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public  JSONObject json_object(){
+
+        JSONObject param= new JSONObject();
+
+        try{
+            param.put("providerCallbackHost", "https://webhook.site/de55348f-c6e2-4518-bc48-1661f1efeec9");
+            textView.setText(param.toString());
+
+        }catch(Exception e){}
+        return param;
+
+    }
+
+    private void requestPOST() {
+        String url = "https://sandbox.momodeveloper.mtn.com/v1_0/apiuser";
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                url, json_object(),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        textView.setText(response.toString());
+                        //hideProgressDialog();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                //hideProgressDialog();
+            }
+        }) {
+
+            //@Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-Reference-Id", "b1dd5140-0b5f-483e-a9d1-12447214ca76");
+                headers.put("Ocp-Apim-Subscription-Key", "70d55faeb88e4515886ddaf4ffe3f963");
+
+                return headers;
+            }
+        };
+
+        // Adding request to request queue
+        MySingleton.getInstance(MainActivity.this).addToRequestQueue(jsonObjReq);
+
+    }
+
+
+
+
+    public void requestRestJSONArrayWithSomeHttpHeaders() throws AuthFailureError {
+
+        String url = "https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/4faa50bf-317d-4da2-947e-0f5cfbfcbb31";
+
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSMjU2In0.eyJjbGllbnRJZCI6IjcwYThjYTQ1LWJmNzAtNDM2Ny05M2I2LWIzMTljZDk3YzVmYyIsImV4cGlyZXMiOiIyMDIyLTA3LTMxVDEzOjU3OjExLjM3MyIsInNlc3Npb25JZCI6ImY0NTA4NjdiLWQ1M2UtNGZhMC05ZDFmLTg1MWZjMGQ5NjdiNyJ9.B0QtENl_S7HPnprOnjQOYr1vQJAaexwcAC9IfxhqpzaWaG36Vrz1lyH4MWs2Wa2d6HfH28hQrdOFMBiylBiTtPESvIGgKQuVvpga_DC9qu_F91xzi3LZWz4beT0A9fXLuOl1EWEdy3LHHWvbQp6ofnYPd6J4kCKzNhHyd6e0RACH-yF4KBIsbVq8FAbjedDrg31CAmvSNMOzVARetBmO-73e4ao-zuqVJiEeYVDGmlR1G9X5hFbxX3UW6e4Km0ye2B_t6UdLSC4twEVvc7m64Y2W3MblBsrHY9G1CvPCEstH26hzH-n4YiwcnkJurlIPIQUZ_cyyBEJDnycTlep5XQ";
+
+        Map<String, String> params = new HashMap<String, String>();
+
+        params.put("Content-Type", "application/json");
+
+        params.put("Ocp-Apim-Subscription-Key", "70d55faeb88e4515886ddaf4ffe3f963");
+        params.put("X-Target-Environment", "sandbox");
+        params.put("X-Reference-Id", "4faa50bf-317d-4da2-947e-0f5cfbfcbb31");
+        params.put("Authorization", "Bearer " + token);
+
+        ArrayRequest jsObjRequest = new ArrayRequest(Request.Method.GET, url, params, requestArraySuccessListener(), requestErrorListener());
+
+        MySingleton.getInstance(MainActivity.this).addToRequestQueue(jsObjRequest);
+
+    }
+
+    private Response.Listener<JSONArray> requestArraySuccessListener() {
+        return new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println(response);
+
+                // Parsing json
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+
+                        JSONObject obj = response.getJSONObject(i);
+                        //String resp = obj.getString("payeeNote");
+                        Toast.makeText(MainActivity.this, obj.getString("apiKey"), Toast.LENGTH_SHORT).show();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        };
+    }
+
+
+    public void requestJSONWithSomeHttpHeaders() throws AuthFailureError {
+
+        String url = "https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/4faa50bf-317d-4da2-947e-0f5cfbfcbb31";
+
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSMjU2In0.eyJjbGllbnRJZCI6IjcwYThjYTQ1LWJmNzAtNDM2Ny05M2I2LWIzMTljZDk3YzVmYyIsImV4cGlyZXMiOiIyMDIyLTA3LTMxVDEzOjU3OjExLjM3MyIsInNlc3Npb25JZCI6ImY0NTA4NjdiLWQ1M2UtNGZhMC05ZDFmLTg1MWZjMGQ5NjdiNyJ9.B0QtENl_S7HPnprOnjQOYr1vQJAaexwcAC9IfxhqpzaWaG36Vrz1lyH4MWs2Wa2d6HfH28hQrdOFMBiylBiTtPESvIGgKQuVvpga_DC9qu_F91xzi3LZWz4beT0A9fXLuOl1EWEdy3LHHWvbQp6ofnYPd6J4kCKzNhHyd6e0RACH-yF4KBIsbVq8FAbjedDrg31CAmvSNMOzVARetBmO-73e4ao-zuqVJiEeYVDGmlR1G9X5hFbxX3UW6e4Km0ye2B_t6UdLSC4twEVvc7m64Y2W3MblBsrHY9G1CvPCEstH26hzH-n4YiwcnkJurlIPIQUZ_cyyBEJDnycTlep5XQ";
+
+        Map<String, String> params = new HashMap<String, String>();
+
+        params.put("Content-Type", "x-www-form-urlencoded");
+
+        params.put("Ocp-Apim-Subscription-Key", "70d55faeb88e4515886ddaf4ffe3f963");
+        params.put("X-Target-Environment", "sandbox");
+        params.put("X-Reference-Id", "4faa50bf-317d-4da2-947e-0f5cfbfcbb31");
+        params.put("X-Authorization-Copy", "Bearer " + token);
+
+        CustomRequest jsObjRequest = new CustomRequest(Request.Method.GET, url, params, requestSuccessListener(), requestErrorListener());
+
+        MySingleton.getInstance(MainActivity.this).addToRequestQueue(jsObjRequest);
+
+    }
 
     public void requestRestJSONWithSomeHttpHeaders() throws AuthFailureError {
 
@@ -89,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(response);
                 try {
 
-                    String str = response.getString("payeeNote");
+                    String str = response.getString("message");
                     textView.setText(str);
 
 //                    // Parsing json
